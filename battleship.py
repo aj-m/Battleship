@@ -34,12 +34,11 @@ def cls():
 def PrintBoard(board,player):
 	
 	#Identifiers
-	string =  "  1 2 3 4 5 6 7 8"	#Column header	
+	print "  1 2 3 4 5 6 7 8"		#Column header
 	string = ""						#For user and computer board
 	string1 = ""					#For blank board
 	string2 = ""					#For test board
-	
-	print string					#Print column header				
+					
 
 	if (player == "user" or player == "computer"):
 		for i in range(0,8):
@@ -225,26 +224,25 @@ def Scoring (score,result):
 def PlaceShip(length, shipType):
 	startPointRow = input("Row of start point: ")
 	startPointColumn = input("Column of start point: ")
-	direction = raw_input("Vertical or horizontal? Type V or H: ")
-	direction = direction.upper()
-
-	print direction
-
+	direction = raw_input("Vertical or horizontal? Type V or H: ").upper()
+	
+	# data validation
+	if (direction != 'V' and direction != 'H'):
+		direction = raw_input("Invalid direction. Vertical or horizontal? Type V or H: ").upper()
+	
+	# check if ship will go off board
+	while ((direction == 'V' and (startPointRow + length) > 8) or (direction == 'H' and (startPointColumn + length) > 8)):
+			startPointRow = input('Invalid starting position. Re-enter row of start point: ')
+			startPointColumn = input("Column of start point: ")
+			direction = raw_input("Vertical or horizontal? Type V or H: ").upper()
+			
 	Row = startPointRow - 1
 	Column = startPointColumn - 1
 
 	count = 0
-	length = 5
-	shipType = 'A'
 	countRow = 0
 	countColumn = 0
 	while (count < length):
-		print count 
-		print length
-		print shipType
-		print countRow
-		print countColumn
-		print direction
 		while (userBoard[Row + countRow][Column + countColumn] != 'O'):
 			print "Location full. Choose a new starting point"
 			startPointRow = input("Row of start point: ")
@@ -256,13 +254,13 @@ def PlaceShip(length, shipType):
 			Column = startPointColumn - 1
 		
 		userBoard[Row + countRow][Column + countColumn] = shipType
-		print userBoard
+		#print userBoard
 		if direction == 'V':
 			countRow = countRow + 1
 		if direction == 'H':
 			countColumn = countColumn + 1
 		count += 1
-	print userBoard
+	#print userBoard
 			
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Function: Turn()
@@ -371,6 +369,7 @@ def main ():
 	print 30*("-")
 	
 	#place user ships
+	PrintBoard(userBoard,"user")
 	print "\nUser's turn to place ships \n"
 	print "Place your aircraft carrier. 5 units long."
 	length = 5
