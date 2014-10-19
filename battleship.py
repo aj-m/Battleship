@@ -9,55 +9,57 @@ Description:
 ************************************************************************************'''
 
 #!/usr/bin/env python
-import os
-import random
-from collections import namedtuple
+import os				#For clear screen function
+import random				#For ramdomly choosing locations when it is the computer's turn
+from collections import namedtuple	#To represent a point (x,y)
 
 # Global variables
-d_ships = {'user':{'A':0,'D':0,'P':0,'S':0,'B':0},'ai':{'A':0,'D':0,'P':0,'S':0,'B':0}}
-userBoard = [[0 for j in range(8)]for i in range(8)]
-AIB = [[0 for j in range(8)]for i in range(8)]
+d_ships = {'user':{'A':0,'D':0,'P':0,'S':0,'B':0},'ai':{'A':0,'D':0,'P':0,'S':0,'B':0}}	#Ship types for both user and computer
+userBoard = [[0 for j in range(8)]for i in range(8)]	#Set the user board
+AIB = [[0 for j in range(8)]for i in range(8)]		#Set the computer board
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: cls()
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Function: cls() - Clears/resets the screen before starting a game
 # Pre:  NONE
 # Post: Screen has been cleared
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def cls():
 	os.system(['clear','cls'][os.name == 'nt'])
 	
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: PrintBoard()
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Function: PrintBoard() - Formats the game board
 # Pre:  NONE
 # Post: Empty board has been printed
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def PrintBoard(board,player):
 	
 	#Identifiers
-	print "  1 2 3 4 5 6 7 8"		#Column header
-	string = ""						#For user and computer board
-	string1 = ""					#For blank board
-	string2 = ""					#For test board
+	print "  1 2 3 4 5 6 7 8"	#Column header
+	string = ""			#For user and computer board
+	string1 = ""			#For blank board
+	string2 = ""			#For test board
 					
-
-	if (player == "user" or player == "computer"):
+	#Format user and computer boards
+	if (player == "user" or player == "computer"):	
 		for i in range(0,8):
 			string += str(i+1)
 			for j in range(0,8):
 				string += '|' + str(board[i][j]) 
-			string += "\n"
+			string += "\n"	#increment and skip a line
 #			row = ord(row) + 1
 		print string
-		
-	elif (player == "blank"):
+	
+	#Format a blank board to be used when we wnat to hide placed ships
+	elif (player == "blank"):		
 		for i in range(0,8):
 			string1 += str(i+1)
 			for j in range(0,8):
 				string1 += '|' + str(board[i][j]) 
-			string1 += "\n"
+			string1 += "\n" #increment and skip a line
 #			row = ord(row) + 1
 		print string1
-		
+	
+	#If neither "user", "computer", or "blank" have been selected, print blank.
 	else:
 		for i in range(0,8):
 			string2 = "" + str(i+1)
@@ -66,26 +68,29 @@ def PrintBoard(board,player):
 					string2 += board[i][j] + '|'
 				elif (board[i][j] == '-'):
 					string2 += board[i][j] + '|'
-		# print string2
+		print string2
 		
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: AIGen()
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Function: AIGen() - Generates the computer's turn.
 # Pre: AIB has been defined
 # Post: A computer generated board has been made
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def AIGen(AIB): #This is the AI board for
-	iShipList = [5,4,3,3,2]
-	cNameList = ['A','D','B','S','P']
-	iCount = 0
-	while (iCount <=4):
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def AIGen(AIB): #This is the AI board
+	
+	#Identifiers:
+	iShipList = [5,4,3,3,2]			#Ship list
+	cNameList = ['A','D','B','S','P']	#Ship names/type
+	iCount = 0				#Counter
+	
+	while (iCount <=4):			
 		gCount = iShipList[iCount]
 		#print gCount
 		bEmptyCheck = 1
-		RNXC = 0
-		RNYC = 0
-		while (gCount >= 1): #RNJesus
+		RNXC = 0			#Refers to horizontal
+		RNYC = 0			#Refers to vertical
+		
+		while (gCount >= 1): 		#RNJesus	
 			#print "First Loop"
-			
 			if(bEmptyCheck>0):
 				#print "RNJESUS"
 				RNX = random.randint(0,7)
@@ -129,26 +134,27 @@ def AIGen(AIB): #This is the AI board for
 				RNXC = RNXC - 1
 			count -= 1
 		iCount += 1
-#End AIGen
+#End AIGen()
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: CheckWin
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Function: CheckWin() - Checks if the user or computer has won
 # Pre: userBoard and AIB have been defined
 # Post: Returns true or false
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def CheckWin(board):
      for i in range (10):
           for j in range (10):
-               if (board[i][j] != -1 and board[i][j] != 'X' and board[i][j] != '-'):
-				return False
-     return True
+		if (board[i][j] != -1 and board[i][j] != 'X' and board[i][j] != '-'):
+			return False
+	return True
+#End CheckWin()
 	 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: isSunk()
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Function: isSunk() - Check if a ship has been sunk
 # Pre: NONE
 # Post: True has been returned if the ship was sunk or 
 # False has been returned if the ship was not sunk
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def isSunk(aircraftHits, submarineHits, battleshipHits, destroyerHits, patrolHits, player):
 	if player == 'user':
 		if aircraftHits == 5:
@@ -172,19 +178,20 @@ def isSunk(aircraftHits, submarineHits, battleshipHits, destroyerHits, patrolHit
 			print "You sunk the Destroyer"
 		if patrolHits == 5:
 			print "You sunk the Patrol Boat"
-# End isSunk
+# End isSunk()
 	 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	 
-# Function: Scoring()
-# Pre:	To update score, caller will pass in current score (can be zero) and the occasion for the change in score.
-# 	  	Pass the following in as "result" for the appropriate occasion:
-# 	   	For the sinking of an AI ship: "SunkAI" followed by the first letter of the ship name
-# 	   	For the sinking of a user ship: "SunkUser" followed by the first letter of the ship name
-# 	   	For a hit on the AI board: "H"
-# 	   	For a miss on the AI board: "M"
-#	   	Remember punctuation
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# Function: Scoring() - A scoring system for the game
+# Pre:	To update score, caller will pass in current score (can be zero) and the
+#	occasion for the change in score.
+# 	  Pass the following in as "result" for the appropriate occasion:
+# 	   For the sinking of an AI ship: "SunkAI" followed by the 1st letter of the ship name
+# 	   For the sinking of a user ship: "SunkUser" followed by the 1st letter of the ship name
+# 	   For a hit on the AI board: "H"
+# 	   For a miss on the AI board: "M"
+#	   Remember punctuation
 # Post: Score has been updated 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def Scoring (score,result):
 	if (result[0] == 'S'): #sunk
 		if (result[4] == 'A'): #AI
@@ -214,12 +221,14 @@ def Scoring (score,result):
 	else:
 		score -= 2
 	return score
-# End Scoring
+# End Scoring()
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: PlaceShip()
-#
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Function: PlaceShip() - Algorithm to place ship in the chosen location and display it
+#		on the board.
+# Pre: length and ship Type have been declared
+# Post: The ship has been placed in the requested location
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 '''THIS IS NOT WORKING PROPERLY, HELP!'''
 def PlaceShip(length, shipType):
 	startPointRow = input("Row of start point: ")
@@ -261,9 +270,10 @@ def PlaceShip(length, shipType):
 			countColumn = countColumn + 1
 		count += 1
 	#print userBoard
-			
+# EndPlaceShip()
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: Turn()
+# Function: Turn() - Loops through computer and user turns until the end of the game
 # Pre: NONE
 # Post: Userboard and computerboards are updated to hit/miss
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				
@@ -350,9 +360,11 @@ def Turn(player,userBoard):
 # End Turn()
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: main()
+# Function: main() - Execution of Battleship game
 # Pre: 
-# Post:
+# Post: Battleship has been executed successfully--User and computer have taken turns;
+#	ships have been placed; score has been recorded; sinked ships have been recorded;
+#	and, wins have been identified.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def main ():
 	cls()
@@ -431,4 +443,3 @@ def main ():
 	
 main()
 #Main()
-
