@@ -397,7 +397,7 @@ def Turn(player,opponentBoard,RNX,RNY,score):
 				if(player == 'user'): return "You destroyed their aircraft carrier!",score
 				else: return "Aircraft carrier destroyed!",score
 
-			if(currentType == 'B' and d_ships[opponent][currentType] >= 3):		#Battleship
+			if(currentType == 'B' and d_ships[opponent][currentType] >= 4):		#Battleship
 				score = Scoring(score,'SunkAIB')
 				d_ships[opponent][currentType] = 'sunk'
 				cls()
@@ -413,7 +413,7 @@ def Turn(player,opponentBoard,RNX,RNY,score):
 				if(player == 'user'): return "You destroyed their submarine!",score
 				else: return "Submarine destroyed!",score
 
-			if(currentType == 'D' and d_ships[opponent][currentType] >= 4):		#Destroyer
+			if(currentType == 'D' and d_ships[opponent][currentType] >= 3):		#Destroyer
 				score = Scoring(score,'SunkAID')
 				d_ships[opponent][currentType] = 'sunk'
 				cls()
