@@ -154,9 +154,9 @@ def AIGen(AIB): #This is the AI board
 #End AIGen()
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function: CheckWin - checks if the board passed in is a winning board
-# Pre: userBoard and AIB have been defined
-# Post: Returns true or false - True if win, else false
+# Function: CheckWin - checks if the player passed in has had their entire fleet sunk
+# Pre: d_ships exists
+# Post: Returns true or false - True if fleet destroyed, else false (ships remain in play)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def CheckWin(player):
 	for i in 'ABSDP':
